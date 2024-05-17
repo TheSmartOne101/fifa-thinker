@@ -103,10 +103,13 @@ def main():
     root = Tk()
     root.title("Fußballspiel-Simulator")
 
-    text_area = Text(root, wrap='word', height=20, width=50)
+    # Set the background color of the root window to a darker color
+    root.configure(bg='#333333')
+
+    text_area = Text(root, wrap='word', height=20, width=50, bg='#444444', fg='#ffffff')
     text_area.pack(side='left', fill='both', expand=True)
 
-    scroll_bar = Scrollbar(root, command=text_area.yview)
+    scroll_bar = Scrollbar(root, command=text_area.yview, bg='#333333', troughcolor='#444444')
     scroll_bar.pack(side='right', fill='y')
 
     text_area.config(yscrollcommand=scroll_bar.set)
@@ -152,8 +155,9 @@ def main():
             play_game()
         else:
             text_area.insert('end', "Vielen Dank fürs Spielen! Bis später!\n")
+            root.destroy()  # Close the Tkinter window
 
-    play_button = Button(root, text='Spiel spielen', command=play_game)
+    play_button = Button(root, text='Spiel spielen', command=play_game, bg='#555555', fg='#ffffff')
     play_button.pack(side='bottom', pady=10)
 
     root.mainloop()
