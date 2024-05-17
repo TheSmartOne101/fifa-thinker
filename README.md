@@ -4,6 +4,13 @@
 >(wenn ihr auf Windows seit ändert den namen von `thinker` zu `thinker.exe`)
 >und führt die Datei aus
 
+>[!WARNING]
+>Führt diesen Befehl unbeding aus!
+>```bash
+>pip install -r requirements.txt
+>```
+    
+
 >[!IMPORTANT]
 >Alles muss in einem Ordner sein
 
