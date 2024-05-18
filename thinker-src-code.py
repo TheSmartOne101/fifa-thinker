@@ -70,7 +70,7 @@ def save_result_to_db(team1, team2, team1_score, team2_score):
     cursor = conn.cursor()
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS results
-                      (id INTEGER PRIMARY KEY, winner TEXT, loser TEXT, team1_score INTEGER, team2_score INTEGER)''')
+                      (id INTEGER PRIMARY KEY, "Winner" INTEGER, "Loser" INTEGER, "1st Team Score:" INTEGER, "2nd Team Score" INTEGER)''')
 
     if team1_score > team2_score:
         winner, loser = team1, team2
@@ -80,7 +80,7 @@ def save_result_to_db(team1, team2, team1_score, team2_score):
     winner_names = ','.join([player.name for player in winner])
     loser_names = ','.join([player.name for player in loser])
 
-    cursor.execute('INSERT INTO results (winner, loser, team1_score, team2_score) VALUES (?, ?, ?, ?)',
+    cursor.execute('INSERT INTO results (winner, loser, "1st Team Score:", "2nd Team Score") VALUES (?, ?, ?, ?)',
                    (winner_names, loser_names, team1_score, team2_score))
 
     conn.commit()
