@@ -70,7 +70,7 @@ def save_result_to_db(team1, team2, team1_score, team2_score):
     cursor = conn.cursor()
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS results
-                      (id INTEGER PRIMARY KEY, "Winner" INTEGER, "Loser" INTEGER, "1st Team Score:" INTEGER, "2nd Team Score" INTEGER)''')
+                      (id INTEGER PRIMARY KEY, "Winner" TEXT, "Loser" TEXT, "1st Team Score:" INTEGER, "2nd Team Score" INTEGER)''')
 
     if team1_score > team2_score:
         winner, loser = team1, team2
@@ -139,23 +139,37 @@ def main():
         team1_score, team2_score = simulate_match(team1, team2, text_area)
         text_area.insert('end', f"\nEndstand: Team 1, {team1_score} - {team2_score}, Team 2\n")
 
+        if team1_score > team2_score:
+            text_area.insert('end', f"\nTeam 1 hat gewonnen mit {team1_score} Toren")
+        else:
+            text_area.insert('end', f"\nTeam 2 hat gewonnen mit {team2_score} Toren")
+
         # Save match results to the database
         save_result_to_db(team1, team2, team1_score, team2_score)
 
         if chosen_team:
             if (team1_score > team2_score and chosen_team == team1) or (team1_score < team2_score and chosen_team == team2):
-                text_area.insert('end', "Glückwunsch, Sie haben gewonnen!\n")
+                text_area.insert('end', f"\nGlückwunsch, Sie haben gewonnen!\n")
                 webbrowser.open("https://t3.ftcdn.net/jpg/02/82/23/94/360_F_282239447_9JUkxLmUPzBvOrEAXVEx2GpNd1EkPOSO.jpg")
             else:
-                text_area.insert('end', "Ups, Sie haben verloren.\n")
+                text_area.insert('end', f"\nUps, Sie haben verloren.\n")
                 webbrowser.open("https://i1.sndcdn.com/artworks-BBMnwmO6ymZ90v3V-zYlw4g-t500x500.jpg")
 
-        play_again = messagebox.askquestion("Noch eine Runde?", "Möchten Sie noch eine Runde spielen?")
-        if play_again == 'yes':
-            play_game()
-        else:
-            text_area.insert('end', "Vielen Dank fürs Spielen! Bis später!\n")
-            root.destroy()  # Close the Tkinter window
+        def on_key_press(event):
+            if event.char.lower() == 'y':
+                play_again = True
+            elif event.char.lower() == 'n':
+                play_again = False
+            else:
+                return
+
+            if play_again:
+                play_game()
+            else:
+                text_area.insert('end', "Vielen Dank fürs Spielen! Bis später!\n")
+                root.destroy()  # Close the Tkinter window
+
+        root.bind('<Key>', on_key_press)
 
     play_button = Button(root, text='Spiel spielen', command=play_game, bg='#555555', fg='#ffffff')
     play_button.pack(side='bottom', pady=10)
